@@ -4,24 +4,35 @@
 #include "ray.h"
 #include "vec3.h"
 
-bool hit_sphere(const point3& center, double radius, const Ray& r) {
+double hit_sphere(const point3& center, double radius, const Ray& r) {
 	vec3 oc = r.origin() - center;
-	double a = dot(r.direction(), r.direction());
-	double b = 2.0 * dot(oc, r.direction());
-	double c = dot(oc, oc) - radius * radius;
-	double discriminant = b * b - 4 * a * c;
-	return (discriminant >= 0);
+	double a = r.direction().length_squared();
+	double half_b = dot(oc, r.direction());
+	double c = oc.length_squared() - radius * radius;
+	double discriminant = half_b * half_b - a * c;
+	
+	if (discriminant < 0)
+	{
+		return -1.0f;
+	}
+	else
+	{
+		return (-half_b - sqrt(discriminant)) / a;
+	}
 }
 
 Color ray_color(const Ray& r)
 {
-	if (hit_sphere(point3(0, 0, -1), 0.5, r))
-		return Color(1, 0, 0);
+	double t = hit_sphere(point3(0, 0, -1), 0.5, r);
+	if (t > 0.0)
+	{
+		vec3 N = unit_vector(r.at(t) - vec3(0, 0, -1));
+		return 0.5 * Color(N.x() + 1, N.y() + 1, N.z() + 1);
+	}
 
-	/*vec3 unit_direction = unit_vector(r.direction());
+	vec3 unit_direction = unit_vector(r.direction());
 	double a = 0.7 * (unit_direction.y() + 1.0);
-	return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);*/
-	return Color(1, 1, 1);
+	return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
 }
 
 int main()
