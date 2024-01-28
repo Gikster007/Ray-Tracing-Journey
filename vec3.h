@@ -102,19 +102,19 @@ public:
 		return u.e[0] * v.e[0] + u.e[1] * v.e[1] + u.e[2] * v.e[2];
 	}
 
-	friend inline vec3 cross(const vec3& u, const vec3& v)
+	static vec3 cross(const vec3& u, const vec3& v)
 	{
 		return vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
 			u.e[2] * v.e[0] - u.e[0] * v.e[2],
 			u.e[0] * v.e[1] - u.e[1] * v.e[0]);
 	}
 
-	static inline vec3 unit_vector(vec3 v)
+	static vec3 unit_vector(vec3 v)
 	{
 		return v / v.lenght();
 	}
 
-	static inline vec3 random_in_unit_sphere()
+	static vec3 random_in_unit_sphere()
 	{
 		while (true)
 		{
@@ -124,12 +124,12 @@ public:
 		}
 	}
 
-	static inline vec3 random_unit_vector()
+	static vec3 random_unit_vector()
 	{
-		return unit_vector(random_in_unit_sphere());
+		return unit_vector(random(-1, 1));
 	}
 
-	static inline vec3 random_on_hemisphere(const vec3& normal)
+	static vec3 random_on_hemisphere(const vec3& normal)
 	{
 		vec3 on_unit_sphere = random_unit_vector();
 		if (dot(on_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal

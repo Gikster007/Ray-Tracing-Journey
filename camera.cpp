@@ -80,11 +80,11 @@ Color Camera::ray_color(const Ray& r, const Hittable& world) const
 
 	if (world.hit(r, Interval(0, infinity), rec))
 	{
-		vec3 direction = direction.random_on_hemisphere(rec.normal);
+		vec3 direction = vec3::random_on_hemisphere(rec.normal);
 		return 0.5 * ray_color(Ray(rec.p, direction), world);
 	}
 
-	vec3 unit_direction = unit_direction.unit_vector(r.direction());
+	vec3 unit_direction = vec3::unit_vector(r.direction());
 	double a = 0.5 * (unit_direction.y() + 1.0);
 	return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
 }
