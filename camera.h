@@ -9,10 +9,11 @@ class Camera
 {
 public:
 	// Image
-	double aspect_ratio = 1.0;
-	int image_width = 100;
+	double aspect_ratio = 1.0;	// Ratio of image width over height
+	int image_width = 100;		// Rendered image width in pixel count
+	int samples_per_pixel = 10; // Count of random samples for each pixel
 
-	void Render(const Hittable& world);
+	void render(const Hittable& world);
 
 private:
 	int    image_height;   // Rendered image height
@@ -22,6 +23,10 @@ private:
 	vec3   pixel_delta_v;  // Offset to pixel below
 
 	void initialize();
+
+	Ray get_ray(int i, int j) const;
+
+	vec3 pixel_sample_square() const;
 
 	Color ray_color(const Ray& r, const Hittable& world) const;
 };
