@@ -18,7 +18,7 @@ void Camera::render(const Hittable& world)
 			for (int sample = 0; sample < samples_per_pixel; ++sample)
 			{
 				Ray r = get_ray(i, j);
-				pixel_color += ray_color(r, world);
+				pixel_color += ray_color(r, max_depth, world);
 			}
 			write_color(std::cout, pixel_color, samples_per_pixel);
 		}
@@ -74,14 +74,18 @@ vec3 Camera::pixel_sample_square() const
 	return (px * pixel_delta_u) + (py * pixel_delta_v);
 }
 
-Color Camera::ray_color(const Ray& r, const Hittable& world) const
+Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) const
 {
 	HitRecord rec;
 
-	if (world.hit(r, Interval(0, infinity), rec))
+	// If we've exceeded the ray bounce limit, no more light is gathered
+	if (depth <= 0)
+		return Color(0, 0, 0);
+
+	if (world.hit(r, Interval(0.001, infinity), rec))
 	{
-		vec3 direction = vec3::random_on_hemisphere(rec.normal);
-		return 0.5 * ray_color(Ray(rec.p, direction), world);
+		vec3 direction = rec.normal + vec3::random_unit_vector();
+		return 0.5 * ray_color(Ray(rec.p, direction), depth - 1, world);
 	}
 
 	vec3 unit_direction = vec3::unit_vector(r.direction());
