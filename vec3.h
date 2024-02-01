@@ -37,6 +37,11 @@ public:
 		e[2] *= t;
 		return *this;
 	}
+	
+	vec3 operator*(vec3& v)
+	{
+		return vec3(e[0] * v.x(), e[1] * v.y(), e[2] * v.z());
+	}
 
 	vec3& operator/=(double t)
 	{
@@ -51,6 +56,13 @@ public:
 	double length_squared() const
 	{
 		return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
+	}
+
+	bool near_zero() const
+	{
+		// Return true if the vector is close to zero in all dimensions
+		double s = 1e-8;
+		return (fabs(e[0]) < s) && (fabs(e[1]) < s) && (fabs(e[2]) < s);
 	}
 
 	static vec3 random()
@@ -136,5 +148,10 @@ public:
 			return on_unit_sphere;
 		else
 			return -on_unit_sphere;
+	}
+
+	static vec3 reflect(const vec3& v, const vec3& n)
+	{
+		return v - 2 * dot(v, n) * n;
 	}
 };

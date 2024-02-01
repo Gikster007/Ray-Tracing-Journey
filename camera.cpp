@@ -84,8 +84,14 @@ Color Camera::ray_color(const Ray& r, int depth, const Hittable& world) const
 
 	if (world.hit(r, Interval(0.001, infinity), rec))
 	{
-		vec3 direction = rec.normal + vec3::random_unit_vector();
-		return 0.5 * ray_color(Ray(rec.p, direction), depth - 1, world);
+		Ray scattered;
+		Color attenuation;
+		if (rec.mat->scatter(r, rec, attenuation, scattered))
+		{
+			Color rc = ray_color(scattered, depth - 1, world);
+			return Color(attenuation.x() * rc.x(), attenuation.y() * rc.y(), attenuation.z() * rc.z());
+		}
+		return Color(0, 0, 0);
 	}
 
 	vec3 unit_direction = vec3::unit_vector(r.direction());

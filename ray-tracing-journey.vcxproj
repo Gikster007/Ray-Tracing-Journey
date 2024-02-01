@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="material.cpp" />
     <ClCompile Include="ray.cpp" />
     <ClCompile Include="sphere.cpp" />
   </ItemGroup>
@@ -141,6 +142,7 @@
     <ClInclude Include="hittable-list.h" />
     <ClInclude Include="hittable.h" />
     <ClInclude Include="interval.h" />
+    <ClInclude Include="material.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="vec3.h" />
